@@ -1,0 +1,15 @@
+
+
+Data: Apr 22 2018	Hora: 14:24:14
+
+O grafo grafo5-4.txt possuia Delta = 4 
+Com 3 cores o menor somatório foi: 4
+0  1  2  2  1  
+----------------------------------------
+
+Data: Apr 22 2018	Hora: 14:24:14
+
+O grafo grafo5-4.txt possuia Delta = 4 
+Com 4 cores o menor somatório foi: 0
+0  1  2  3  1  
+----------------------------------------

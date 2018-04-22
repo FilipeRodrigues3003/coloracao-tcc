@@ -1,0 +1,25 @@
+Informações sobre arquivos e documentação:
+
+
+- Gera Matriz:
+	Comando: ./geraMatriz
+	Entrada: Inteiro N correspondente ao tamanho da matriz.
+	Saida: Matriz quadrada de lado N preenchida com zeros e nome grago1.txt.
+
+- Cria Matriz:
+	Comando: ./criaMatriz
+	Entrada: String correspondente ao nome do arquivo que será criado; 
+		 Inteiro N correspondente ao tamanho da matriz; 
+		 Inteiro Delta correspondente ao grau máximo que o grafo terá.
+	Saida: Matriz quadrada de lado N preenchida com um grafo aleatorio.
+
+- Plotar Grafo:
+	Comando: python plotarGrafo.py
+	Entrada: String com nome do arquivo com a Matriz do Grafo.
+	Saida: Imagem do grafo correspondente a Matriz lida.
+
+- Forca Bruta:
+	Comando: ./forcabruta
+	Entrada: String com nome do arquivo com matriz; 
+		 Inteiro com numero maximo de cores para colorir o grafo.
+	Saida: Log no arquivo 'resultados/result.txt' contendo informacoes relacionadas aos testes realizados.
