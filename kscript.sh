@@ -26,7 +26,10 @@ for((delta=2;delta<vertice;delta++))
 do
 nome=grafo$vertice-$delta.txt
 echo ${nome}
-#./criaMatriz ${nome} $vertice $delta
+if [ ! -e grafos/${nome} ]
+then
+./criaMatriz ${nome} $vertice $delta
+fi
 for((k=2;k<=$delta;k++))
 do
 ./forcabruta ${nome} $k
@@ -34,7 +37,6 @@ done
 done
 done
 else
-echo "Os programas foram compilados com sucesso!"
 echo ""
 tput bold; echo "Para executar os programas informe:" ; tput sgr0
 echo ""
