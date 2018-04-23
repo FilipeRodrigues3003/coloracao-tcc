@@ -1,13 +1,19 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h> 
 
-int main()
+int main(int argc, char *argv[ ] )
 {
     int n, i, j;
-
-    printf("Informe o tamanho da matriz: ");
-    scanf("%d",&n);
-
+    if(!argv[1])
+    {
+        printf("Informe o tamanho da matriz: ");
+        scanf("%d",&n);
+    }
+    else
+    {
+        n = atoi(argv[1]);
+    }
     FILE *arq;
 
 	arq = fopen("grafo-novo.txt", "w");

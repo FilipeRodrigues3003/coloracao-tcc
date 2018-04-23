@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <sys/time.h>
 
 int calcularDelta(int** G, int n);
 int lerN(char arq[]);
@@ -11,18 +12,34 @@ void geraCor(int cor[], int n, int k, long long int a);
 int verificaCor(int cor[], int** G, int n);
 void escreveResult(int min, int cor, int n, int k, int delta, char* nome);
 
-int main(){
+int main(int argc, char *argv[ ]){
 	int k, j;
 	char arq[20] = "";
 	char pasta[30] = "grafos/";
 	
-	printf("Informe o nome do arquivo do Grafo: ");
-	scanf("%s", arq);
-	printf("Informe o valor de K: ");
-	scanf("%d",&k);
+	if(!argv[1])
+	{
+		printf("Informe o nome do arquivo do Grafo: ");
+		scanf("%s", arq);
+	}
+	else
+	{
+		strcpy(arq,argv[1]);
+	}
+
+	if(!argv[2])
+	{
+		printf("Informe o valor de K: ");
+		scanf("%d",&k);
+	}
+	else
+	{
+		k = atoi(argv[2]);
+	}
 	
 	strcat(pasta,arq);
-	printf("\n%s\n",pasta);
+	if(argc==0)
+		printf("\n%s\n",pasta);
 	
 	int n = lerN(pasta);
 	if(n<=0)
@@ -42,7 +59,8 @@ int main(){
 
 		int delta = calcularDelta(G, n);
 
-		printf("Delta de G: %d\n",delta);
+		if(argc==0)
+			printf("Delta de G: %d\n",delta);
 
 		long long int i, p = 1; 
 		int min = -1, solmin = -1;
@@ -203,9 +221,19 @@ int verificaCor(int cor[], int** G, int n)
 
 void escreveResult(int min, int cor, int n, int k, int delta, char* nome)
 {
+	struct timeval tv;
+	struct tm* ptm;
+	char time_string[40];
+
+	gettimeofday(&tv, NULL);
+	ptm = localtime(&tv.tv_sec);
+
+	strftime(time_string, sizeof(time_string), "%H:%M:%S", ptm);
+
+
 	FILE *arq;
 	arq = fopen("resultados/result.txt", "a");
-	fprintf(arq,"\n\nData: %s\tHora: %s",__DATE__,__TIME__);
+	fprintf(arq,"\n\nData: %s\tHora: %s",__DATE__,time_string);
 	fprintf(arq,"\n\nO grafo %s possui Delta = %d ", nome, delta);
 	fprintf(arq,"\nUtilizando %d cores o menor somatório foi: %d\n", k, min);
 	int i, cores[n];

@@ -7,21 +7,44 @@
 #define FALSE 1
 
 
-int main()
+int main(int argc, char *argv[ ])
 {
     int n, i, j, delta, num;
     char nome[20];
     char pasta[30] = "grafos/";
-    int valido = TRUE;
 
-    printf("Informe o nome do arquivo: ");
-    scanf("%s",nome);
-    printf("Informe o tamanho da matriz: ");
-    scanf("%d",&n);
-    printf("Informe o Delta Máximo do Grafo: ");
-    scanf("%d",&delta);
+    if(!argv[1])
+    {
+        printf("Informe o nome do arquivo: ");
+        scanf("%s",nome);
+    }
+    else
+    {
+        strcpy(nome,argv[1]);
+    }
+    
+    if(!argv[2])
+    {
+        printf("Informe o tamanho da matriz: ");
+        scanf("%d",&n);
+    }
+    else
+    {
+        n = atoi(argv[2]);
+    }
+    
+    if(!argv[3])
+    {
+        printf("Informe o Delta Máximo do Grafo: ");
+        scanf("%d",&delta);
+    }
+    else
+    {
+        delta = atoi(argv[3]);
+    }
 
-    srand( (unsigned)time(NULL) );
+
+    srand( (unsigned)clock() );
     int cont[n];
     int G[n][n];
 
@@ -54,6 +77,8 @@ int main()
         G[i][i] = 0;
     }
 
+    srand( (unsigned)clock() );
+    
     for(i=0;i<n;i++)
     {
         for(j=0;j<n;j++)
@@ -66,9 +91,11 @@ int main()
                 G[i][j] = num;
                 G[j][i] = num;
             }
-            printf("%d  ",G[i][j]);
+            if(argc==0)
+                printf("%d  ",G[i][j]);
         }
-        printf("\n");
+        if(argc==0)
+            printf("\n");
     }
 
     
@@ -82,7 +109,9 @@ int main()
 		    fprintf(arq,"%d  ",G[i][j]);
         fprintf(arq,"\n");
     }
-    printf("\nMatriz criada com sucesso!\nUtilize \'python plotarGrafo.py\' para ve-lo.\n\n");
+    
+    if(argc==0)
+        printf("\nMatriz criada com sucesso!\nUtilize \'python plotarGrafo.py\' para ve-lo.\n\n");
     fclose(arq);
 }
 
