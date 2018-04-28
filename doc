@@ -1,25 +1,51 @@
-Informações sobre arquivos e documentação:
+
+@author: Filipe Rodrigues Cardoso da Silva
+@copyrights: Faculdade de Educação Tecnológica do Estado do Rio de Janeiro
+@title: Coloração ponderada com interceção minima
+@version: 0.2.0 
+@date: 27/04/2018
 
 
-- Gera Matriz:
-	Comando: ./geraMatriz
-	Entrada: Inteiro N correspondente ao tamanho da matriz.
-	Saida: Matriz quadrada de lado N preenchida com zeros e nome grago1.txt.
+Informações sobre arquivos:
 
+- Kscript:
+
+	Comando: ./kscript.sh
+
+	Descrição: 	Script para gerenciamento autônomo dos programas para serem executados.
+
+	Entrada: Inteiro com quantidade de grafos de mesmo vértice para ser executado;
+		 Inteiro com o primeiro grafo que deve ser iniciado. "Caso não informado ele iniciará com 4".
+	
+	Saída: 	 Não possui.
+	
 - Cria Matriz:
+
 	Comando: ./criaMatriz
+
+	Descrição: 	Programa para criar uma Matriz de Adjacência de um Grafo com o número de Vértices 
+			e Delta Máximo definidos
+
 	Entrada: String correspondente ao nome do arquivo que será criado; 
 		 Inteiro N correspondente ao tamanho da matriz; 
-		 Inteiro Delta correspondente ao grau máximo que o grafo terá.
-	Saida: Matriz quadrada de lado N preenchida com um grafo aleatorio.
+		 Inteiro D [1, 100] correspondente a densidade que o grafo terá.
+		 Inteiro P correspondente ao peso máximo das arestas
 
-- Plotar Grafo:
-	Comando: python plotarGrafo.py
-	Entrada: String com nome do arquivo com a Matriz do Grafo.
-	Saida: Imagem do grafo correspondente a Matriz lida.
+	Saída: 	 Matriz de adjacência de lado N preenchida com um grafo aleatorio.
+		 Número de Vértices, Número de Arestas, Densidade do Grafo, Peso Máximo e Grau Máximo.
+
 
 - Forca Bruta:
+
 	Comando: ./forcabruta
-	Entrada: String com nome do arquivo com matriz; 
-		 Inteiro com numero maximo de cores para colorir o grafo.
-	Saida: Log no arquivo 'resultados/result.txt' contendo informacoes relacionadas aos testes realizados.
+
+	Descrição: 	Programa para gerar todas as possibilidades de coloração e avaliar qual coloração com 
+			menor somatório dos pesos das arestas contendo cores iguais nos vértices. 
+
+	Entrada: String com nome do arquivo com matriz.
+
+	Saída: 	 Log no arquivo do grafo contendo informacoes relacionadas aos testes realizados:
+		 Número de cores usadas para colorir (K), Somatório mínimo do peso das arestas, Quantidade de arestas com vértices de mesma cor;
+		 Vetor com a coloração utilizada para obter o melhor resultado.
+
+

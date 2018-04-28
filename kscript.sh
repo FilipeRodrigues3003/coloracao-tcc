@@ -1,6 +1,8 @@
 #! /bin/bash
 #author: Filipe Rodrigues Cardoso da Silva
 #organization: Faculdade de Educação Tecnológica do Estado Rio de Janeiro
+rm forcabruta
+rm criaMatriz
 if [ ! -e forcabruta ]
 then
 gcc -Wall -pedantic -std=c99 forcabruta.c -o forcabruta -lm
@@ -18,22 +20,39 @@ if test $2
 then
 v=$2
 else
-v=3
+v=4
+fi
+sum=$(($1+$v))
+if [ $sum -gt 26 ]
+then
+echo $sum
+echo ""
+echo "Erro: quantidade de grafos pedido não pode ser executado."
+echo ""
+echo "Máximo de vertices permitidos: 26"
+exit
 fi
 for((vertice=$v;vertice<($1+$v);vertice++))
 do
-for((delta=2;delta<vertice;delta++))
+if [ $vertice -gt 16 ]
+then
+d=$vertice-$($($($vertice-16)*2)+3)
+else
+d=vertice
+fi
+for((densidade=3;densidade<10;densidade=densidade+2))
 do
-nome=grafo$vertice-$delta.txt
+den=$(($densidade*10))
+nome=grafo$vertice-$den.txt
+
 echo ${nome}
 if [ ! -e grafos/${nome} ]
 then
-./criaMatriz ${nome} $vertice $delta
+./criaMatriz ${nome} $vertice $den 9
 fi
-for((k=2;k<=$delta;k++))
-do
-./forcabruta ${nome} $k
-done
+
+./forcabruta ${nome}
+
 done
 done
 else
@@ -41,6 +60,6 @@ echo ""
 tput bold; echo "Para executar os programas informe:" ; tput sgr0
 echo ""
 echo "	'O NÚMERO DE GRAFOS PARA SEREM TESTADOS' - Obrigatório" 
-echo "	'NÚMERO MINIMO DE VÉRTICES PARA INICIAR' - Opcional (Default = 3)"
+echo "	'NÚMERO MINIMO DE VÉRTICES PARA INICIAR' - Opcional (Default = 4)"
 echo ""
 fi 

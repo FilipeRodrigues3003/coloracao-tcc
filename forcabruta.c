@@ -1,3 +1,13 @@
+/*
+#################################################################################
+#	@author: Filipe Rodrigues Cardoso da Silva								    #
+#	@copyrights: Faculdade de Educação Tecnológica do Estado do Rio de Janeiro  #
+#	@title: Coloração ponderada com interceção minima						    #
+#	@version: 0.2.0 											    			#
+#   @date: 27/04/2018  												    		#
+#################################################################################
+*/
+
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -5,37 +15,28 @@
 #include <time.h>
 #include <sys/time.h>
 
-int calcularDelta(int** G, int n);
+
 int lerN(char arq[]);
 void lerGrafo(int** G, char arq[], int n);
-void geraCor(int cor[], int n, int k, long long int a);
-int verificaCor(int cor[], int** G, int n);
-void escreveResult(int min, int cor, int n, int k, int delta, char* nome);
+int geraCor(int cor[], int n, int k, int ac[]);
+int verificaCor(int cor[], int** G, int n, int* arestas);
+void escreveResult(int n, int k, int min, int arestas, int cores[], char* nome);
 
 int main(int argc, char *argv[ ]){
-	int k, j;
+	int k, j, i;
 	char arq[20] = "";
 	char pasta[30] = "grafos/";
 	
-	if(!argv[1])
+	if(argc>0)
+	{
+		strcpy(arq,argv[1]);
+	}
+	else
 	{
 		printf("Informe o nome do arquivo do Grafo: ");
 		scanf("%s", arq);
 	}
-	else
-	{
-		strcpy(arq,argv[1]);
-	}
 
-	if(!argv[2])
-	{
-		printf("Informe o valor de K: ");
-		scanf("%d",&k);
-	}
-	else
-	{
-		k = atoi(argv[2]);
-	}
 	
 	strcat(pasta,arq);
 	if(argc==0)
@@ -54,87 +55,65 @@ int main(int argc, char *argv[ ]){
 			G[j]=(int *) malloc(n*sizeof(int));
 		}
 		int cores[n];
-		
+	
 		lerGrafo(G, pasta, n);
+	
+		int min, solmin = sizeof(int)-1, arestas = 0, aremin;
+		int corMin[n];
 
-		int delta = calcularDelta(G, n);
-
-		if(argc==0)
-			printf("Delta de G: %d\n",delta);
-
-		long long int i, p = 1; 
-		int min = -1, solmin = -1;
-		int corMin;
-
-	//	for(k=2;k<=delta;k++)
+		for(k=1;solmin>0;k++)
 		{
 			for(j=0;j<n;j++)
 			{
-				p = p*k;
+				cores[j] = 0;
 			}
-			
-			for(i=0;i<p;i++)
-			{
-			//	printf("\n\nTeste numero: %lld",i);
-				geraCor(cores, n, k, i);
-			/*	printf("\nConjunto de Cores: ");
-				for(j=0;j<n;j++)
-				{
-					printf("%d  ",cores[j]);
-				}
-				printf("\n\n");
-			*/	min = verificaCor(cores, G, n);
-				//printf("\nSomatorio: %d",min);
-				if(i==0)
+			do
+			{	
+				min = verificaCor(cores, G, n, &arestas);
+				if(solmin==sizeof(int)-1)
 				{
 					solmin = min;
+					for(i=0;i<n;i++)
+					{
+						corMin[i] = cores[i];
+					}
+					aremin = arestas;
 				}
 				else
+				{
 					if(min<solmin)
 					{	
 						solmin = min;
-						corMin = i;
-						//printf("\nMenor: %d",solmin);
+						
+						for(i=0;i<n;i++)
+						{
+							corMin[i] = cores[i];
+						}
+
+						aremin = arestas;
 					}
-			}
-			escreveResult(solmin,corMin,n,k, delta,arq);
+				}
+			}while(geraCor(cores, n, k, cores)==0);
+			escreveResult(n,k,solmin,aremin,corMin,arq);
 		}
 	}
 	
 }
 
-int calcularDelta(int** G, int n)
-{
-	int soma = 0, maior = 0;
-	int i, j;
-	for(i=0;i<n;i++)
-	{
-		for(j=0;j<n;j++)
-		{
-			if(G[i][j] != 0)
-			{
-				soma++;
-			}
-		}
-		if(soma>maior)
-		{
-			maior = soma;
-		}
-		soma = 0;
-	}
-	return maior;
-}
 
 int lerN(char nome[])
 {
-	int n = -1;
+	int n = -1, b, c, d, g;
 	FILE *arq;
 	
 	arq = fopen(nome, "r");
 	if(arq == NULL)
 	    printf("Erro, nao foi possivel abrir o arquivo\n");
 	else
-		fscanf(arq,"%d",&n);
+		fscanf(arq,"%d %d %d %d %d",&n, &b, &c, &d, &g);
+	
+	if(g==0)
+		n = g;
 		
 	fclose(arq);
 	return n;
@@ -142,14 +121,14 @@ int lerN(char nome[])
 
 void lerGrafo(int** G, char nome[], int n)
 {
-	int i, j, m;
+	int i, j, m, a, b, c, d, e;
 	FILE *arq;
 	
 	arq = fopen(nome, "r");
 	if(arq == NULL)
 	    printf("Erro, nao foi possivel abrir o arquivo\n");
 	
-	fscanf(arq,"%d",&m);
+	fscanf(arq,"%d %d %d %d %d", &a, &b, &c, &d, &e);
 	for(i=0;i<n;i++)
 	{
 		for(j=0;j<n;j++)
@@ -160,52 +139,44 @@ void lerGrafo(int** G, char nome[], int n)
 	}
 }
 
-void geraCor(int cor[], int n, int k, long long int a)
+int geraCor(int cor[], int n, int k, int ac[])
 {
-	long long int b = a;
-	int quo, rest;
-	int aux[n], i;
-	for(i=0;i<n;i++){
-		aux[i] = -1;
-		cor[i] = 0;	
-	}
-		
-	i = 0;
-	
-	do{
-		quo = b/k;
-		rest = b-(quo*k);
-		aux[i] = rest;
-		b = quo;
-		i++;
-	}while(b>0);
-//	printf("\n%d\n",i);
-	int j, l;
-	
-//	for(j=0;j<n;j++){
-//		printf(" %d ",aux[j]);
-//	}
-	
-	
-	for(j=n-1, l=0; j>=0 ; j--, l++)
-	{	
-		
-		if(aux[l] != -1)
+	int i, j=0;
+	for(i=n-1;i>=0;i--)
+	{			
+		if(ac[i]<k-1 && j==0)
 		{
-			cor[j] = aux[l]; 
+			cor[i] = ac[i] + 1; 
+			j=1;
 		}
 		else
 		{
-			cor[j] = 0;
+			if(j==1)
+			{
+				cor[i] = ac[i];
+			}
+			else
+			{
+				cor[i] = 0;
+				j = 0;
+			}
 		}
+	}
+	if(j==1)
+	{
+		return 0;
+	}
+	else
+	{
+		return -1;
 	}
 }
 
 
-int verificaCor(int cor[], int** G, int n)
+int verificaCor(int cor[], int** G, int n, int* arestas)
 {
 	int soma = 0;
-	int i, j;
+	int i, j, are = 0;
 	for(i=0;i<n-1;i++)
 	{
 		for(j=i+1;j<n;j++)
@@ -213,39 +184,42 @@ int verificaCor(int cor[], int** G, int n)
 			if(cor[i] == cor[j])
 			{
 				soma += G[i][j];
+				if(G[i][j]!=0)
+					are++;
 			}
 		}
 	}
+	*arestas = are;
 	return soma;
 }
 
-void escreveResult(int min, int cor, int n, int k, int delta, char* nome)
+void escreveResult(int n, int k, int min, int arestas, int cores[], char* nome)
 {
 	struct timeval tv;
 	struct tm* ptm;
 	char time_string[40];
+	char pasta[40] = "grafos/";
 
 	gettimeofday(&tv, NULL);
 	ptm = localtime(&tv.tv_sec);
 
-	strftime(time_string, sizeof(time_string), "%H:%M:%S", ptm);
+	strftime(time_string, sizeof(time_string), "%d/%m/%Y %H:%M:%S", ptm);
 
+	strcat(pasta,nome);
 
 	FILE *arq;
-	arq = fopen("resultados/result.txt", "a");
-	fprintf(arq,"\n\nData: %s\tHora: %s",__DATE__,time_string);
-	fprintf(arq,"\n\nO grafo %s possui Delta = %d ", nome, delta);
-	fprintf(arq,"\nUtilizando %d cores o menor somatório foi: %d\n", k, min);
-	int i, cores[n];
-
-	geraCor(cores,n, k, cor);
+	arq = fopen(pasta, "a");
+	fprintf(arq,"\n\n%s\n",time_string);
+	fprintf(arq,"\n%3d  %3d  %3d\n", k, min, arestas);
+	int i;
 
 	for(i=0;i<n;i++)
-		fprintf(arq,"%d  ", cores[i]);
+		fprintf(arq,"%3d  ", cores[i]);
 
 	fprintf(arq,"\n\n");
 
 	for(i=0;i<45;i++)
 		fprintf(arq,"-");
 	fclose(arq);
+	return;
 }
