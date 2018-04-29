@@ -8,7 +8,8 @@ f = open(pasta,"r")
 a = {} 
 a = f.readline()
 #print(type(a))
-n = int(a[2])
+b = str(a[:3].strip(" "))
+n = int(b)
 #print(n)
 linha = 0
 lin = defaultdict(list)
@@ -34,7 +35,7 @@ print(color)
 labels = {}
 edge_labels = {}
 i = 0
-cores = ["black", "red", "blue", "green", "yellow", "gray", "orange", "purple", "pink"]
+cores = ["#000000", "#ff0000", "#0000ff", "#00ff00", "#fff000", "#727272", "#ff8800", "#aa00ff", "#ff00ff", "#914600", "#849100", "#00916a", "#881600", "#008888", "#6bf9b2", "#f9f96b", "#896bf9", "#ffa3a3", "#ffe1a3", "#f7ffa3", "#bbffa3"]
 
 
 for linha in range(0,n):

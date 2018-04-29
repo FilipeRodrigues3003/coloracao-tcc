@@ -7,9 +7,9 @@ pasta = "grafos/"+nome
 f = open(pasta,"r")
 a = {} 
 a = f.readline()
-print(type(a))
-n = int(a[2])
-print(n)
+b = str(a[:3].strip(" "))
+n = int(b)
+#print(n)
 linha = 0
 lin = defaultdict(list)
 mat = f.read()
