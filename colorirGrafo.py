@@ -7,11 +7,12 @@ pasta = "grafos/"+nome
 f = open(pasta,"r")
 a = {} 
 a = f.readline()
-print(type(a))
+#print(type(a))
 n = int(a[2])
-print(n)
+#print(n)
 linha = 0
 lin = defaultdict(list)
+color = []
 mat = f.read()
 G=nx.Graph()
 #print(mat)
@@ -22,14 +23,22 @@ for col in range(0,n*(n*5)+n):
             linha = linha + 1
         else:
             lin[linha].append(int(mat[col]))
-            print(lin[linha])
+           
 
+for col in range(0,len(mat)-48):
+    if col >= ((len(mat)-48)-n*5):
+        if mat[col] != " " and mat[col] != "\n":
+            color.append( int(mat[col]))
+
+print(color)
 labels = {}
 edge_labels = {}
+i = 0
+cores = ["black", "red", "blue", "green", "yellow", "gray", "orange", "purple", "pink"]
+
 
 for linha in range(0,n):
-    print(lin[linha])
-    G.add_node(linha)
+    G.add_node(linha, cor='')
     labels = linha
     for col in range(0,n):
         if lin[linha][col] != 0:
@@ -37,6 +46,14 @@ for linha in range(0,n):
             edge_labels = lin[linha][col]
 
 
+for linha in range(0,n):
+    G.node[linha]['cor'] = cores[color[i]]
+    #print("{} {}".format(cores[color[i]],linha))
+    i = i + 1
+
+cores=[]
+for linha in G.node:
+     cores.append(G.node[linha]['cor'])
 
 
 aux= nx.shell_layout(G,scale=0.5)
@@ -51,8 +68,9 @@ for turma in G.node:
     nnode+=1
 
 label = nx.get_edge_attributes(G,'weight')
+
 nx.draw_networkx_edge_labels(G, pos, edge_labels=label, alpha=0.5)
-nx.draw_networkx(G, pos, node_color="k", font_color="w")
+nx.draw_networkx(G, pos, labels, node_color=cores, font_color="w")
 
 plt.show()
     
