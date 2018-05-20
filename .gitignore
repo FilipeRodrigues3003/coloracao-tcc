@@ -1,5 +1,15 @@
+*.dat
+*.res
 *.txt
 *.png
 geraMatriz
 criaMatriz
 forcabruta
+forcabruta-v2.c
+forcabruta_v2
+testeColoracao.c
+testeColoracao
+Definição do Padrão de Coloração.txt
+INFO1005TCC.txt
+graphScript.sh
+Coloracao.zip

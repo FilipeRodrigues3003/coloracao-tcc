@@ -31,7 +31,7 @@ for col in range(0,len(mat)-48):
         if mat[col] != " " and mat[col] != "\n":
             color.append( int(mat[col]))
 
-print(color)
+#print(color)
 labels = {}
 edge_labels = {}
 i = 0
